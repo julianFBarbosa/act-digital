@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { PokemonService } from "./services/PokemonService";
+import { SPRITE_URL } from "./CONSTANTS";
 import { Pagination } from "@mui/material";
 import { getPageQuantity } from "./helpers";
-import Pokemon from "./Pokemon";
 
 function App() {
 	const [pokemonList, setPokemonList] = useState(null);
@@ -12,6 +12,8 @@ function App() {
 		async function fetchData() {
 			const response = await PokemonService.getPokemons();
 
+			console.log("response", response);
+
 			setPokemonList(response);
 			setPageQuantity(getPageQuantity(response.count));
 		}
@@ -19,27 +21,33 @@ function App() {
 		fetchData();
 	}, []);
 
-	const handleChange = async (page) => {
+	const handleChange = async (event, page) => {
 		page -= 1;
 		const offset = page * 20;
 
-		const response = await PokemonService.getPokemons(offset);
-		setPokemonList(response);
+    const response = await PokemonService.getPokemons(offset);
+    console.log('response', response)
 	};
 
 	if (!pokemonList) {
-		return <p>carregando...</p>;
+		return <p>carregando</p>;
 	}
 
 	return (
 		<div>
 			<p>PokeList</p>
-			{pokemonList.results.map((element) => (
-				<Pokemon key={element.name} data={element} />
+			{pokemonList.results.map((element, index) => (
+				<div key={element.name}>
+					<p>{element.name}</p>
+					<img
+						src={`${SPRITE_URL}${index + 1}.png`}
+						alt={element.name}
+					/>
+				</div>
 			))}
 			<Pagination
 				count={pageQuantity}
-				onChange={(_, page) => handleChange(page)}
+				onChange={(event, page) => handleChange(event, page)}
 			/>
 		</div>
 	);

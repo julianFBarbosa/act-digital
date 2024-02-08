@@ -1,13 +1,10 @@
-/* eslint-disable react/prop-types */
-import { getSpriteUrl } from "./helpers";
-
-const Pokemon = ({ data }) => {
-	console.log(data.name);
-
+const Pokemon = (props) => {
+	// eslint-disable-next-line react/prop-types
+	console.log(props.name);
 	return (
-		<div key={data.name}>
-			<p>{data.name}</p>
-			<img src={getSpriteUrl(data.url)} alt={data.name} />
+		<div key={props.name}>
+			<p>{props.name}</p>
+			<img src={`${SPRITE_URL}${index + 1}.png`} alt={props.name} />
 		</div>
 	);
 };
